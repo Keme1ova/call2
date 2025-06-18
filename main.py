@@ -20,21 +20,23 @@ active_connections = {}
 def login_page(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.post("/login")
-def login(email: str = Form(...), password: str = Form(...)):
-    try:
-        user = auth.get_user_by_email(email)
-        return RedirectResponse(url=f"/call?uid={user.uid}", status_code=302)
-    except:
-        return HTMLResponse("Пользователь не найден", status_code=401)
-
 @app.post("/register")
 def register(email: str = Form(...), password: str = Form(...)):
     try:
         user = auth.create_user(email=email, password=password)
         return RedirectResponse(url=f"/call?uid={user.uid}", status_code=302)
-    except:
-        return HTMLResponse("Ошибка при регистрации", status_code=400)
+    except Exception as e:
+        print(f"Registration error: {e}")
+        return HTMLResponse(f"Ошибка при регистрации: {e}", status_code=400)
+
+@app.post("/login")
+def login(email: str = Form(...), password: str = Form(...)):
+    try:
+        user = auth.get_user_by_email(email)
+        return RedirectResponse(url=f"/call?uid={user.uid}", status_code=302)
+    except Exception as e:
+        print(f"Login error: {e}")
+        return HTMLResponse(f"Пользователь не найден: {e}", status_code=401)
 
 @app.get("/call", response_class=HTMLResponse)
 def call_ui(request: Request, uid: str):
