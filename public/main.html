@@ -1,0 +1,19 @@
+### 📁 public/main.html ###
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video Call</title>
+</head>
+<body>
+  <h2>Welcome, your ID: {{ uid }}</h2>
+  <input type="text" id="targetId" placeholder="Target UID"><br>
+  <button onclick="startCall()">Start Call</button>
+  <video id="localVideo" autoplay muted playsinline width="300"></video>
+  <video id="remoteVideo" autoplay playsinline width="300"></video>
+  <script>
+    const uid = "{{ uid }}";
+  </script>
+  <script src="/static/webrtc.js"></script>
+</body>
+</html>
